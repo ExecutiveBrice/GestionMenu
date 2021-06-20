@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
+  <div class="content-to-show">
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#" routerLink="accueil"><i class="fa fa-home white fa-2x"></i></a>
+      </li>  
+      <li *ngIf="isAdmin" class="nav-item ">
+        <a class="nav-link" href="#" routerLink="ingredients">Ingredients</a>
+      </li>
+      <li *ngIf="loggedIn" class="nav-item">
+        <a class="nav-link" href="#" routerLink="mesrecettes">Mes Recettes</a>
+      </li>
+      <li *ngIf="loggedIn" class="nav-item">
+        <a class="nav-link" href="#" routerLink="menu">Mes Menus</a>
+      </li>
+      <li *ngIf="loggedIn" class="nav-item">
+        <a class="nav-link" href="#" routerLink="liste">Mes Listes de Courses</a>
+      </li>
+
+ 
+      <li *ngIf="!loggedIn" class="nav-item">
+        <a class="nav-link" href="#" routerLink="login"><i class="fa fa-sign-in white"></i></a>
+      </li>  
+      <li *ngIf="!loggedIn" class="nav-item">
+        <a class="nav-link" href="#" routerLink="signup"><i class="fa fa-user-plus white"></i></a>
+      </li>  
+      <li *ngIf="loggedIn" class="nav-item">
+        <a class="nav-link" href="#" (click)="logout()"><i class="fa fa-power-off white"></i></a>
+      </li> 
+
+    </ul>
+  </div>
+</div>
+
+  <ul class="navbar-nav content-to-hide">
+    <li class="nav-item">
+      <a class="nav-link" href="#" routerLink="accueil"><i class="fa fa-home white fa-2x"></i></a>
+    </li>  
+    <li *ngIf="isAdmin" class="nav-item ">
+      <a class="nav-link" href="#" routerLink="ingredients">Ingredients</a>
+    </li>
+    <li *ngIf="loggedIn" class="nav-item">
+      <a class="nav-link" href="#" routerLink="mesrecettes">Mes Recettes</a>
+    </li>
+    <li *ngIf="loggedIn" class="nav-item">
+      <a class="nav-link" href="#" routerLink="menu">Mes Menus</a>
+    </li>
+    <li *ngIf="loggedIn" class="nav-item">
+      <a class="nav-link" href="#" routerLink="liste">Mes Listes de Courses</a>
+    </li>
+  </ul>
+
+  <ul class="navbar-nav ml-auto ">
+    <li class="nav-item">
+      <input type="text" [(ngModel)]="filterinput" (ngModelChange)="applyFilter()" class="form-control form-control-sm">
+    </li>  
+    <li *ngIf="!loggedIn" class="nav-item content-to-hide">
+      <a class="nav-link" href="#" routerLink="login"><i class="fa fa-sign-in white"></i></a>
+    </li>  
+    <li *ngIf="!loggedIn" class="nav-item content-to-hide">
+      <a class="nav-link" href="#" routerLink="signup"><i class="fa fa-user-plus white"></i></a>
+    </li>  
+    <li *ngIf="loggedIn" class="nav-item content-to-hide">
+      <a class="nav-link" href="#" (click)="logout()"><i class="fa fa-power-off white"></i></a>
+    </li>    
+  </ul>
+
+
+  
+</nav>
+
+<router-outlet></router-outlet>

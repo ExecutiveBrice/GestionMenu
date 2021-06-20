@@ -1,0 +1,65 @@
+<div class="row">
+
+
+  <div *ngIf="allRecettes != undefined" class="col-12">
+
+    <div *ngFor="let recette of allRecettes | orderBy:'id':false | filter:filternom:true:'recetteName':'nom'" class="col-12 col-sm-6 col-md-3"
+      (click)="openRecette(recette)">
+      <div class="col-12 panel">
+
+
+
+        <div class="col-11 title">
+          {{recette.recetteName.nom}}
+        </div>
+        <div *ngIf="loggedIn && recette.user.id != userId" (click)="starring(recette)" class="col-1 ">
+          <i *ngIf="isStarring(recette)" class="fa fa-star"></i>
+          <i *ngIf="!isStarring(recette)" class="fa fa-star-o"></i>
+        </div>
+
+
+        <div *ngIf="loggedIn && recette.user.id != userId" class="col-11 subtitle">
+          by {{recette.user.username}}
+        </div>
+      
+
+
+
+        <div class="col-6 d-none d-sm-block">
+          <div class="col-12 title">
+            Ingredients:
+          </div>
+          <div *ngFor="let ingredientUsed of recette.ingredientsUsed | orderBy:'id':false " class="col-12">
+
+            <div class="col-6 input-xs">
+              {{ingredientUsed.ingredient.nom}}
+            </div>
+
+            <div class="col-3 input-xs">
+              {{ingredientUsed.quantite}}
+            </div>
+            <div class="col-3 input-xs">
+              {{ingredientUsed.ingredient.unite}}
+            </div>
+          </div>
+
+          <div class="col-12 d-none d-lg-block">
+            <div class="col-6 title">
+              Recette:
+            </div>
+            <div class="col-6 subtitle">
+              ({{recette.prepa}} min)
+            </div>
+            {{recette.recette}}
+          </div>
+        </div>
+
+
+        <div class="col-12 col-sm-6 limited">
+          <img class="fusion" *ngIf="recette.image" [src]="recette.image" alt="Photo de la recette">
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

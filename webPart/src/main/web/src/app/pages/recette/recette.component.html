@@ -1,0 +1,173 @@
+<div class="row">
+  <div class="col-12">
+    <div id="overlay">
+      <div class="spinner_overlay">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="title col-12 col-sm-6">
+    <h1>{{recette.recetteName.nom}}</h1>
+  </div>
+
+  <div class="title col-8 col-sm-4">
+    by {{recette.user.username}}
+  </div>
+
+
+  <div *ngIf="loggedIn && recette.user.id == userId" class="col-2 col-sm-1">
+    <i *ngIf="lock" class="fa fa-lock fa-2x" (click)="lock = !lock"></i>
+    <i *ngIf="!lock" class="fa fa-unlock-alt fa-2x" (click)="lock = !lock"></i>
+  </div>
+
+
+  <div *ngIf="loggedIn" (click)="starring()" class="col-2 col-sm-1">
+    <i *ngIf="isStarring()" class="fa fa-star fa-2x"></i>
+    <i *ngIf="!isStarring()" class="fa fa-star-o fa-2x"></i>
+  </div>
+</div>
+<div class="row">
+  <div *ngIf="!lock" class="col-12">
+    <div *ngFor="let rayon of rayons | orderBy:'id':false " class="col-6 col-sm-4 col-md-2">
+      <button type="button" class="btn btn-block dropdown-toggle" data-toggle="dropdown">{{rayon}}</button>
+      <div class="dropdown-menu scrollable-menu">
+        <a class="dropdown-item"
+          *ngFor="let ingredient of ingredients  | orderBy:'nom':false | filter:rayon:false:'rayon'"
+          (click)="choisir(ingredient)">{{ingredient.nom}}</a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="lock" class="col-6 col-md-3">
+    <div *ngFor="let ingredientUsed of recette.ingredientsUsed " class="row">
+      <div class="col-4">
+        {{ingredientUsed.ingredient.nom}}
+      </div>
+      <div class="col-4">
+        {{ingredientUsed.quantite*quantite}}
+      </div>
+      <div class="col-4">
+        {{ingredientUsed.ingredient.unite}}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!lock" class="col-12">
+    <div *ngFor="let ingredientUsed of recette.ingredientsUsed " class="row">
+      <div class="col-4">
+        <div class="input-group">
+          <input type="text" readonly [(ngModel)]="ingredientUsed.ingredient.nom" class="form-control">
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="input-group">
+          <input type="number" [(ngModel)]="ingredientUsed.quantite" (blur)="updateRecette()" class="form-control">
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="input-group">
+          <input type="text" readonly [(ngModel)]="ingredientUsed.ingredient.unite" class="form-control">
+        </div>
+      </div>
+      <div class="col-1">
+        <i class="fa fa-trash" (click)="remove(ingredientUsed)"></i>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="lock" class="col-6 col-md-3 order-md-12">
+    <img class="container" *ngIf="recette.image" [src]="recette.image" alt="Photo de la recette">
+  </div>
+
+  <div *ngIf="!lock" class="col-12">
+    <div *ngIf="croppedImage" class="col-6">
+      <img class="container" [src]="croppedImage" alt="Photo de la recette">
+    </div>
+    <div *ngIf="!croppedImage" class="col-6">
+      <img class="container" [src]="recette.image" alt="Photo de la recette">
+    </div>
+    <div class="col-6">
+      <input type="file" (change)="fileChangeEvent($event)" accept="image/*">
+
+      <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="2 / 3"
+        [resizeToWidth]="256" format="png" (imageCropped)="imageCropped($event)" (imageLoaded)="imageLoaded()"
+        (cropperReady)="cropperReady()" (loadImageFailed)="loadImageFailed()">
+      </image-cropper>
+      <button type="button" class="btn btn-block btn-info" (click)="uploadImage(croppedImage)">Valider cette
+        image</button>
+    </div>
+  </div>
+
+
+  <div *ngIf="lock" class="col-12 col-md-6">
+    <div class="col-5">
+      <h4>Recette:</h4>
+    </div>
+    <div class="col-6">
+      <div class="col-12 col-sm-4">
+        <i class="fas fa-mortar-pestle"></i>
+        {{recette.prepa}} min
+      </div>
+      <div class="col-12 col-sm-4">
+        <i class="fas fa-thermometer-three-quarters"></i>
+        {{recette.cuisson}} min
+      </div>
+      <div class="col-12 col-sm-4">
+        <i *ngIf="recette.pourType == 1" class="fas fa-user-alt"></i>
+        <i *ngIf="recette.pourType == 2" class="fas fa-bread-slice"></i>
+        {{recette.pour}}
+      </div>
+    </div>
+
+    <div class="col-12">
+      <h4>Etapes:</h4>
+    </div>
+    <div *ngIf="recette.etapes.length > 0" class="col-12">
+      <div *ngFor="let etape of recette.etapes | orderBy:'etape':false ">
+        {{etape.description}}
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="!lock" class="col-12 col-md-6">
+    <div class="col-12">
+      <div class="input-group">
+        <input type="number" [(ngModel)]="recette.prepa" (blur)="updateRecette()" class="form-control"> minutes
+      </div>
+      <div class="input-group">
+        <input type="number" [(ngModel)]="recette.cuisson" (blur)="updateRecette()" class="form-control"> minutes
+      </div>
+
+      <div class="input-group">
+        <input type="number" [(ngModel)]="recette.pour" (blur)="updateRecette()" class="form-control col-6">
+
+        <button type="button" class="btn btn-block dropdown-toggle col-6" data-toggle="dropdown">{{recette.pourType ==
+          1?"personne(s)":"unitée(s)"}}</button>
+        <div class="dropdown-menu scrollable-menu">
+          <a class="dropdown-item" (click)="recette.pourType = 1; updateRecette()">personne(s)</a>
+          <a class="dropdown-item" (click)="recette.pourType = 2; updateRecette()">unitée(s)</a>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="col-8">
+      <h4>Etapes:</h4>
+    </div>
+    <div class="col-2">
+      <i class="fa fa-plus" (click)="addEtape()"></i>
+    </div>
+    <div *ngIf=" recette.etapes.length > 0" class="col-12">
+      <div *ngFor="let etape of recette.etapes | orderBy:'etape':false " class="input-group">
+
+        <textarea droppable (onDrop)="onItemDrop($event, etape)" draggable [dragData]="etape" (blur)="updateRecette()"
+          class="form-control" maxlength="256" rows="3" [(ngModel)]="etape.description"></textarea>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

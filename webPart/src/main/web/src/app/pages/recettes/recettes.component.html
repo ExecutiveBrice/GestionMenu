@@ -1,0 +1,47 @@
+<div class="row">
+  <div class="col-4 col-sm-6">
+    <button type="button" class="btn dropdown-toggle input-full" data-toggle="dropdown">{{type}}</button>
+    <div class="dropdown-menu scrollable-menu fusion">
+      <a class="dropdown-item" *ngFor="let type of allTypes" (click)="changeType(type.name)">{{type.name}}</a>
+    </div>
+  </div>
+  <div *ngIf="loggedIn" class="col-8 col-sm-6">
+    <div class="col-10">
+      <div class="input-group">
+        <input type="text" [(ngModel)]="nom" class="form-control" id="nom">
+      </div>
+    </div>
+    <div class="col-2">
+      <button type="button" class="btn btn-block btn-info" (click)="addRecette(nom)">Ajout</button>
+    </div>
+  </div>
+
+
+  <div *ngIf="allRecettesName != undefined" class="col-12">
+    <div *ngFor="let recetteName of allRecettesName | orderBy:'nom':false | filter:filternom:true:'nom'"
+      class="col-12 col-sm-6 col-md-3" (click)="recetteName.state = !recetteName.state">
+      <div class="col-12 panel">
+        <div class="col-10 title">
+          {{recetteName.nom}}
+        </div>
+        <div class="col-2">
+          {{recetteName.recettes?recetteName.recettes.length:0}}
+        </div>
+        <div *ngIf="recetteName.state" class="col-12">
+          <div *ngFor="let recette of recetteName.recettes | orderBy:'id':false " (click)="openRecette(recette)">
+            <div class="col-11 subtitle">
+              by {{recette.user.username}}
+            </div>
+            <div *ngIf="loggedIn" (click)="starring(recette)" class="col-1">
+              <i *ngIf="isStarring(recette)" class="fa fa-star"></i>
+              <i *ngIf="!isStarring(recette)" class="fa fa-star-o"></i>
+            </div>
+            <div class="col-12 limited">
+              <img class="fusion" *ngIf="recette.image" [src]="recette.image" alt="Photo de la recette">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

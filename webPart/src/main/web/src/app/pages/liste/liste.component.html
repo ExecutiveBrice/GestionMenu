@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-2">
+    <button type="button" class="btn btn-block btn-info" routerLink="/liste/{{weekNumber-1 == 0?52:weekNumber-1}}">S{{weekNumber-1}}</button>
+  </div>
+  <div class="title col-6">
+    Lundi {{ firstDay }} au Dimanche {{ lastday }}
+  </div>
+  <div class="title col-1">
+    <i *ngIf="lock" class="fa fa-lock fa-2x" (click)="lock = !lock"></i>
+    <i *ngIf="!lock" class="fa fa-unlock-alt fa-2x" (click)="lock = !lock"></i>
+  </div>
+  <div class="col-2">
+    <button type="button" class="btn btn-block btn-info" routerLink="/liste/{{weekNumber+1==53?1:weekNumber+1}}">S{{weekNumber+1}}</button>
+  </div>
+
+
+  <div *ngIf="!lock" class="col-12">
+    <div *ngFor="let rayon of rayons | orderBy:'id':false " class="col-12 col-sm-6 col-md-3">
+      <button type="button" class="btn btn-block dropdown-toggle" data-toggle="dropdown">{{rayon}}</button>
+      <div class="dropdown-menu scrollable-menu">
+        <a class="dropdown-item" *ngFor="let ingredient of ingredients  | orderBy:'nom':false | filter:rayon:false:'rayon'"
+          (click)="choisir(ingredient)">{{ingredient.nom}}</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+<div class="row" *ngIf="lock">
+  <div *ngFor="let listeRayon of listeCourse | keyvalue" class="carre col-12 col-sm-6 col-md-4">
+    <div class="rayon col-12" >
+      <div class="title">{{listeRayon.key}}</div>
+      <div *ngFor="let ingredientUsed of listeRayon.value | orderBy:'id':false "  (click)="ingredientUsed.checked = !ingredientUsed.checked" class="col-12">
+
+        <div class="col-6">
+          {{ingredientUsed.ingredient.nom}}
+        </div>
+        <div class="col-2">
+          {{ (ingredientUsed.quantite / ingredientUsed.ingredient.coef) | coursenumber }}
+        </div>
+        <div class="col-2">
+          {{ingredientUsed.ingredient.uniteVente}}
+        </div>
+        <div *ngIf="ingredientUsed.checked" class="col-2">
+          <i class="fa fa-check-circle" aria-hidden="true"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="row" *ngIf="!lock">
+  <div *ngFor="let listeRayon of listeCourse | keyvalue" class="carre col-12 col-sm-6 col-md-4">
+    <div class="rayon col-12" >
+      <div class="title">{{listeRayon.key}}</div>
+      <div *ngFor="let ingredientUsed of listeRayon.value | orderBy:'id':false " class="col-12">
+
+
+        <div class="col-6">
+          {{ingredientUsed.ingredient.nom}}
+        </div>
+
+        <div  class="col-2">
+          <input type="text" [(ngModel)]="ingredientUsed.quantite" (blur)="update(ingredientUsed)" class="form-control">
+        </div>
+
+        <div class="col-2">
+          {{ingredientUsed.ingredient.unite}}
+        </div>
+        <div class="col-1">
+          <i class="fa fa-trash" (click)="remove(ingredientUsed)"></i>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

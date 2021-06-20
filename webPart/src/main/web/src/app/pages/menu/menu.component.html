@@ -1,0 +1,130 @@
+<div class="row">
+
+  <div class="col-2">
+    <button type="button" class="btn btn-block btn-info"
+      routerLink="/menu/{{weekNumber-1 == 0?52:weekNumber-1}}">S{{weekNumber-1 == 0?52:weekNumber-1}}</button>
+  </div>
+  <div class="title col-6">
+    Lundi {{ firstDay }} au Dimanche {{ lastday }}
+  </div>
+  <div class="title col-1">
+    <i *ngIf="lock" class="fa fa-lock fa-2x" (click)="lock = !lock"></i>
+    <i *ngIf="!lock" class="fa fa-unlock-alt fa-2x" (click)="lock = !lock"></i>
+  </div>
+  <div class="title col-1">
+    <i data-toggle="tooltip" title="Copie du précédent menu (liste de course comprise)" *ngIf="!lock"
+      class="fa fa-bolt fa-2x" (click)="copyPrevious()"></i>
+
+  </div>
+  <div class="col-2">
+    <button type="button" class="btn btn-block btn-info"
+      routerLink="/menu/{{weekNumber+1==53?1:weekNumber+1}}">S{{weekNumber+1==53?1:weekNumber+1}}</button>
+  </div>
+
+
+
+</div>
+<div *ngIf="menu != undefined" class="row">
+  <div *ngFor="let jour of menu.semaine | orderBy:'id':false " class="col-12 ">
+    <div class="row">
+      <div droppable (onDrop)="onItemDrop($event, jour, 'midi')" class="carre col-12 col-sm-6">
+
+
+
+        <div class="rayon col-12">
+          <div class="col-12">
+            {{jour.nomJour}} midi
+          </div>
+          <div *ngIf="!lock" class="col-12">
+            <div class="row">
+              <div *ngFor="let recettesByType of recettesMap | keyvalue" class="carre col-6 col-sm-4 col-lg-2">
+                <button type="button" class="btn btn-block dropdown-toggle" data-toggle="dropdown">
+                  {{recettesByType.key}}</button>
+                <div class="dropdown-menu scrollable-menu">
+                  <a class="dropdown-item" *ngFor="let recette of recettesByType.value | orderBy:'id':false "
+                    (click)="choisir(recette, jour, 'midi')">{{recette.recetteName.nom}}/{{recette.pour}}
+                    <i *ngIf="recette.pourType == 1" class="fas fa-user-alt"></i>
+                    <i *ngIf="recette.pourType == 2" class="fas fa-bread-slice"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div draggable [dragData]="recetteUsed" *ngFor="let recetteUsed of jour.recettesmidi | orderBy:'id':false "
+            class=" col-12 ">
+            <div class="row">
+              <div class="col-8">
+                <div class="input-group" (click)="openRecette(recetteUsed.recette)">
+                  {{recetteUsed.recette.recetteName.nom}}/{{recetteUsed.recette.pour}}
+                  <i *ngIf="recetteUsed.recette.pourType == 1" class="fas fa-user-alt"></i>
+                  <i *ngIf="recetteUsed.recette.pourType == 2" class="fas fa-bread-slice"></i>
+                </div>
+              </div>
+              <div *ngIf="!lock" class="col-1">
+                <i class="fa fa-minus" (click)="minus(recetteUsed)"></i>
+              </div>
+              <div class="col-1">
+                {{recetteUsed.quantite}}
+              </div>
+              <div *ngIf="!lock" class="col-1">
+                <i class="fa fa-plus" (click)="plus(recetteUsed)"></i>
+              </div>
+              <div *ngIf="!lock" class="col-1">
+                <i class="fa fa-trash" (click)="remove(recetteUsed)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div droppable (onDrop)="onItemDrop($event, jour, 'soir')" class="carre col-12 col-sm-6">
+
+        <div class="rayon col-12">
+          <div class="col-12">
+            {{jour.nomJour}} soir
+          </div>
+          <div *ngIf="!lock" class="col-12">
+            <div class="row">
+              <div *ngFor="let recettesByType of recettesMap | keyvalue" class="carre col-6 col-sm-4 col-lg-2">
+                <button type="button" class="btn btn-block dropdown-toggle" data-toggle="dropdown">
+                  {{recettesByType.key}}</button>
+                <div class="dropdown-menu scrollable-menu">
+                  <a class="dropdown-item" *ngFor="let recette of recettesByType.value | orderBy:'id':false "
+                    (click)="choisir(recette, jour, 'midi')">{{recette.recetteName.nom}}/{{recette.pour}}
+                    <i *ngIf="recette.pourType == 1" class="fas fa-user-alt"></i>
+                    <i *ngIf="recette.pourType == 2" class="fas fa-bread-slice"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div draggable [dragData]="recetteUsed"
+            *ngFor="let recetteUsed of jour.recettessoir | orderBy:'recetteName.nom':false " class=" col-12">
+            <div class="row">
+              <div class="col-8">
+                <div class="input-group" (click)="openRecette(recetteUsed.recette)">
+                  {{recetteUsed.recette.recetteName.nom}}/{{recetteUsed.recette.pour}}
+                  <i *ngIf="recetteUsed.recette.pourType == 1" class="fas fa-user-alt"></i>
+                  <i *ngIf="recetteUsed.recette.pourType == 2" class="fas fa-bread-slice"></i>
+                </div>
+              </div>
+              <div *ngIf="!lock" class="col-1">
+                <i class="fa fa-minus" (click)="minus(recetteUsed)"></i>
+              </div>
+              <div class="col-1">
+                {{recetteUsed.quantite}}
+              </div>
+              <div *ngIf="!lock" class="col-1">
+                <i class="fa fa-plus" (click)="plus(recetteUsed)"></i>
+              </div>
+              <div *ngIf="!lock" class="col-1">
+                <i class="fa fa-trash" (click)="remove(recetteUsed)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

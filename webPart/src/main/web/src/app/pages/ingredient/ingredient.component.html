@@ -1,0 +1,398 @@
+<div class="row">
+  <div class="col-6 col-sm-4 col-md-2">
+    <button *ngIf="!ingredient.state" type="button" class="btn btn-block btn-info"
+      (click)="ingredient.state = !ingredient.state">+</button>
+    <table *ngIf="ingredient.state" class="table table-sm table-borderless panel">
+      <tbody>
+        <tr class="tr-xs">
+          <td>
+            <div class="col-6" (click)="addIngredient(ingredient)">
+              <i class="fa fa-floppy-o "></i>
+            </div>
+            <div class="col-6"> </div>
+          </td>
+          <td>
+            <div class="col-6"> </div>
+            <div class="col-6" (click)="ingredient.state = false">
+              <i class="fa fa-sort-up"></i>
+            </div>
+          </td>
+        </tr>
+        <tr class="tr-xs">
+          <td>
+            <div class="col-12 input-xs">
+              Nom
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.nom" class="form-xs">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Rayon
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <button type="button" class="btn dropdown-toggle btn-xs"
+                data-toggle="dropdown">{{ingredient.rayon}}</button>
+              <div class="dropdown-menu scrollable-menu">
+                <a class="dropdown-item" *ngFor="let rayon of rayons" (click)="ingredient.rayon = rayon">{{rayon}}</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Unité
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.unite" class="form-xs">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Unité Vente
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.uniteVente" class="form-xs">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Coef
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.coef" class="form-xs">
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Proteines
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.proteines" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Glucides
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.glucides" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Lipides
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.lipides" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Sucres
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.sucres" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Acide gras
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.acidegras" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Sel
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.sel" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              KiloJoule
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.kjoule" class="form-xs">
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              KiloCalorie
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs">
+              <input type="text" [(ngModel)]="ingredient.kcal" class="form-xs">
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <div *ngFor="let ing of ingredients | orderBy:'id':false | filter:filternom:true:'nom'" class="col-6 col-sm-4 col-md-2">
+    <button *ngIf="!ing.state" type="button" class="btn btn-block btn-info" (click)="ing.state = !ing.state">{{ing.nom}}
+      <i class="fa fa-sort-down"></i></button>
+    <table *ngIf="ing.state" class="table table-sm table-borderless panel">
+      <tbody>
+        <tr class="tr-xs">
+          <td>
+            <div class="col-6" (click)="updateIngredient(ing)">
+              <i class="fa fa-floppy-o "></i>
+            </div>
+            <div class="col-6" (click)="remove(ing)">
+              <i class="fa fa-trash"></i>
+            </div>
+          </td>
+          <td>
+            <div class="col-6" (click)="ing.lock = !ing.lock">
+              <i *ngIf="!ing.lock" class="fa fa-lock"></i>
+              <i *ngIf="ing.lock" class="fa fa-unlock-alt"></i>
+            </div>
+            <div class="col-6" (click)="ing.state = false">
+              <i class="fa fa-sort-up"></i>
+            </div>
+          </td>
+        </tr>
+        <tr class="tr-xs">
+          <td>
+            <div class="col-12 input-xs">
+              Nom
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.nom" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.nom}}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Rayon
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <button type="button" class="btn  dropdown-toggle btn-xs" data-toggle="dropdown">{{ing.rayon}}</button>
+              <div class="dropdown-menu scrollable-menu">
+                <a class="dropdown-item" *ngFor="let rayon of rayons" (click)="ing.rayon = rayon">{{rayon}}</a>
+              </div>
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.rayon}}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Unité
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.unite" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.unite}}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Unité Vente
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.uniteVente" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.uniteVente}}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Coef
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.coef" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.coef}}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Proteines
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.proteines" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.proteines}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Glucides
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.glucides" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.glucides}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Lipides
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.lipides" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.lipides}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Sucres
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.sucres" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.sucres}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Acide gras
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.acidegras" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.acidegras}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              Sel
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.sel" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.sel}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              KiloJoule
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.kjoule" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.kjoule}}
+            </div>
+        </tr>
+        <tr>
+          <td>
+            <div class="col-12 input-xs">
+              KiloCalorie
+            </div>
+          </td>
+          <td>
+            <div class="col-12 input-xs" *ngIf="ing.lock">
+              <input type="text" [(ngModel)]="ing.kcal" class="form-xs">
+            </div>
+            <div class="col-12 input-xs" *ngIf="!ing.lock">
+              {{ing.kcal}}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
